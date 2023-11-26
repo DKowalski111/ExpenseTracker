@@ -55,6 +55,10 @@
   border-radius: 50%;
 }
 
+.active-button {
+  background-color: #fff;
+  color: rgb(217, 72, 15);
+}
 
 
 @media (min-width: 768px) {
