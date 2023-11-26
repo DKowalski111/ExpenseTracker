@@ -1,58 +1,71 @@
 import Chart, { ChartConfiguration } from "chart.js/auto";
 import { useEffect, useRef } from "react";
 
-const MonthlySpendingsAnalysis = () => {
+const MonthlySpendingsAnalysis: React.FC<{ monthlySpending: { [month: string]: string } }> = (props) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
+
+  let labels: string[] = [];
+  let values: number[] = [];
+
+  for (var c in props.monthlySpending) {
+    labels.push(c);
+    values.push(Number.parseFloat(props.monthlySpending[c]));
+  }
+
+  const convertToSortableDate = (label: string) => {
+    const parts = label.split(' ');
+    const month = parseInt(parts[0]);
+    const year = parseInt(parts[1]);
+    return new Date(year, month - 1);
+  };
+
+  const sortedData = labels.map((label, index) => ({ label, value: values[index] }));
+  sortedData.sort((a, b) => convertToSortableDate(a.label).getTime() - convertToSortableDate(b.label).getTime());
+
+  labels = sortedData.map(item => item.label);
+  values = sortedData.map(item => item.value);
+
 
   useEffect(() => {
     if (chartRef.current) {
-      // Data for the chart
       const data = {
-        labels: ['Housing', 'Utilities', 'Groceries', 'Insurance', 'Dining Out', 'Healthcare', 'Entertainment', 'Debt Repayment', 'Personal Care'],
+        labels: labels,
         datasets: [{
-          label: 'Total expenses',
-          data: [12, 19, 3, 5, 2, 4, 6, 1],
-          backgroundColor: ['#a61e4d', '#862e9c', '#5f3dc4', '#364fc7', '#1864ab', '#0b7284', '#087f5b', '#2b8a3e', '#5c940d'],
+          data: values,
+          backgroundColor: '#a61e4d',
           borderColor: '#212529',
-          borderWidth: 6,
+          borderWidth: 1,
         }],
       };
 
-
-      const options: ChartConfiguration<'doughnut'>['options'] = {
+      const options = {
         responsive: true,
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+            },
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Total expenses',
+            },
+          },
+        },
         plugins: {
           legend: {
-            display: true,
-            position: 'bottom',
+            display: false,
           },
         },
       };
 
-      const innerLabel = {
-        id: 'innerLabel',
-        afterDatasetDraw(chart: { data?: any; ctx?: any; }, args: { meta: any; }, pluginOptions: any) {
-          const { ctx } = chart;
-          const meta = args.meta;
-          const xCoor = meta.data[0].x;
-          const yCoor = meta.data[0].y;
-          const perc = chart.data.datasets[0].data[0] / meta.total * 100;
-          ctx.save();
-          ctx.textAlign = 'center';
-          ctx.fillStyle = '#fffff2';
-          ctx.font = '32px sans-serif';
-          ctx.fillText("$1230.50", xCoor, yCoor);
-          ctx.restore();
-        },
-      };
-
-
-
       const ctx = chartRef.current.getContext('2d');
       if (ctx) {
         const myChart = new Chart(ctx, {
-          type: 'doughnut',
-          plugins: [innerLabel],
+          type: 'bar',
           data: data,
           options: options,
         });

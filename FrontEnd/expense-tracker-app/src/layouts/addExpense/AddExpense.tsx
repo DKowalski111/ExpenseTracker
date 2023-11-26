@@ -13,7 +13,7 @@ const AddExpense = () => {
   const submitNewExpense = async () => {
     if (amount != "" && category != "" && date != "") {
       try {
-        const url = `http://localhost:8080/api/expenses/add/expense`;
+        const url = `${process.env.REACT_APP_API}/add/expense`;
         const expense: AddExpenseRequest = new AddExpenseRequest(amount, category, date);
         const requestOptions = {
           method: 'POST',

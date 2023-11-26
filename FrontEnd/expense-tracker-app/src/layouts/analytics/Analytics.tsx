@@ -10,50 +10,53 @@ import YearlySpendingProps from "../../models/YearlySpendingProps";
 import CategoriesAmountProps from "../../models/CategoriesAmountProps";
 
 const Analytics = () => {
-  const [monthlySpending, setMonthlySpending] = useState<MonthlySpendingProps | undefined>(undefined);
-  const [yearlySpending, setYearlySpending] = useState<YearlySpendingProps | undefined>(undefined);
+  const [monthlySpending, setMonthlySpending] = useState<{ [category: string]: string } | undefined>();
+  const [yearlySpending, setYearlySpending] = useState<{ [category: string]: string } | undefined>();
   const [topInformations, setTopInformations] = useState<TopInformationProps | undefined>(undefined);
-  const [categoriesAmount, setCategoriesAmount] = useState<CategoriesAmountProps | undefined>(undefined);
+  const [categoriesAmount, setCategoriesAmount] = useState<{ [category: string]: string }>();
 
-  useEffect(() => {
-
-    const fetchExpenses = async () => {
-
-      const url = "http://localhost:8080/api/expenses/analytics";
+  const fetchExpenses = async () => {
+    try {
+      const url = `${process.env.REACT_APP_API}/analytics`;
       const requestOptions = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
-      }
+      };
       const response = await fetch(url, requestOptions);
+
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
 
       const responseJson = await response.json();
-      const topInformationProps =
-        new TopInformationProps(responseJson['top informations']['top category'], responseJson['top informations']['total expenses'],
-          responseJson['top informations']['this month expenses'], responseJson['top informations']['month trend']);
-      const monthlySpendingProps = new MonthlySpendingProps(responseJson['monthly spending']);
-      const yearlySpendingProps = new YearlySpendingProps(responseJson['yearly spending']);
-      const categoriesAmountProps = new CategoriesAmountProps(responseJson['categories amount']);
-      setTopInformations(topInformationProps);
-      setMonthlySpending(monthlySpendingProps);
-      setYearlySpending(yearlySpendingProps);
-      setCategoriesAmount(categoriesAmountProps);
+      const topInformationProps = new TopInformationProps(
+        responseJson['top informations']['top category'],
+        responseJson['top informations']['total expenses'],
+        responseJson['top informations']['this month expenses'],
+        responseJson['top informations']['month trend']
+      );
 
-      for (var l in responseJson['categories amount']) {
-        console.log(l);
-      }
-    }
-    try {
-      fetchExpenses();
+      setTopInformations(topInformationProps);
+      setMonthlySpending(responseJson['monthly spending']);
+      setYearlySpending(responseJson['yearly spending']);
+      setCategoriesAmount(responseJson['categories amount']);
     } catch (e: any) {
       console.error(e);
     }
+  };
 
-  }, [])
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(topInformations);
+  //   console.log(monthlySpending);
+  //   console.log(yearlySpending);
+  //   console.log(categoriesAmount);
+  // })
 
   return (
     <div>
@@ -61,16 +64,13 @@ const Analytics = () => {
         {topInformations && <TopInformations informations={topInformations} />}
       </div>
       <div className="container d-lg-flex justify-content-lg-center">
-        <MonthlySpendingsAnalysis />
+        {monthlySpending && <MonthlySpendingsAnalysis monthlySpending={monthlySpending} />}
       </div>
       <div className="container d-lg-flex justify-content-lg-center">
-        <YearlySpendingsAnalysis />
+        {yearlySpending && <YearlySpendingsAnalysis yearlySpendings={yearlySpending} />}
       </div>
       <div className="container d-lg-flex justify-content-lg-center">
-        <MonthlyExpenseCategoryDistribution categoriesAmount={categoriesAmount} />
-      </div>
-      <div className="container d-lg-flex justify-content-lg-center">
-        <YearlyExpenseCategoryDistribution />
+        {categoriesAmount && topInformations && <MonthlyExpenseCategoryDistribution categoriesAmount={categoriesAmount} totalAmount={topInformations.totalExpenses} />}
       </div>
     </div>
   );

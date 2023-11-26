@@ -1,17 +1,14 @@
-import Chart, { ChartConfiguration } from "chart.js/auto";
-import { useEffect, useRef } from "react";
-import CategoriesAmountProps from "../../../models/CategoriesAmountProps";
-
-const CategoriesAmount: React.FC<{ categoriesAmount: { [category: string]: string }, totalAmount: string }> = (props) => {
-
+import Chart, { ChartConfiguration } from 'chart.js/auto';
+import { useEffect, useRef } from 'react';
+const CategoriesAmount: React.FC<{ categoriesAmount: { [category: string]: string }, totalExpenses: number }> = (props) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
 
   let labels: string[] = [];
   let values: number[] = [];
 
-  for (var c in props.categoriesAmount) {
-    labels.push(c);
-    values.push(Number.parseFloat(props.categoriesAmount[c]));
+  for (var l in props.categoriesAmount) {
+    labels.push(l);
+    values.push(Number.parseFloat(props.categoriesAmount[l]));
   }
 
   useEffect(() => {
@@ -45,11 +42,12 @@ const CategoriesAmount: React.FC<{ categoriesAmount: { [category: string]: strin
           const meta = args.meta;
           const xCoor = meta.data[0].x;
           const yCoor = meta.data[0].y;
+          const perc = chart.data.datasets[0].data[0] / meta.total * 100;
           ctx.save();
           ctx.textAlign = 'center';
           ctx.fillStyle = '#fffff2';
           ctx.font = '32px sans-serif';
-          ctx.fillText("$" + props.totalAmount, xCoor, yCoor);
+          ctx.fillText("$" + props.totalExpenses, xCoor, yCoor);
           ctx.restore();
         },
       };
@@ -67,13 +65,13 @@ const CategoriesAmount: React.FC<{ categoriesAmount: { [category: string]: strin
         return () => myChart.destroy();
       }
     }
-  }, [props.categoriesAmount]);
+  }, []);
 
   return (
-    <div className="col-md-6 text-center align-self-start my-5 chartarea mt-md-5 mx-md-3 ms-xxl-0 me-xxl-0" style={{ borderRadius: '6px', border: '1px solid var(--bs-body-bg)', maxWidth: '933px', width: '100%' }}>
-      <h3 className="fw-bold my-3 mx-3" style={{ color: 'var(--bs-body-bg)' }}>Categories Amount</h3>
-      <div>
-        <canvas className="m-5 p-5" ref={chartRef} width="400" height="200" />
+    <div className="container d-lg-flex justify-content-lg-center">
+      <div className="col-md-6 text-center align-self-start my-5 chartarea mt-md-5 mx-md-3 ms-xxl-0 me-xxl-0" style={{ borderRadius: '6px', border: '1px solid var(--bs-body-bg)', maxWidth: '933px', width: '100%' }}>
+        <h3 className="fw-bold my-3 mx-3" style={{ color: 'var(--bs-body-bg)' }}>Expense Category Distribution</h3>
+        <div><canvas className="m-5 p-5" ref={chartRef} width="400" height="200"></canvas></div>
       </div>
     </div>
   );

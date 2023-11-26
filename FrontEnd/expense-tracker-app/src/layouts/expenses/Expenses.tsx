@@ -21,11 +21,12 @@ const Expenses = () => {
       const requestOptions = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application-json'
+          'Content-Type': 'application/json'
         }
       }
 
       const response = await fetch(url, requestOptions);
+      console.log(response)
 
       if (!response.ok) {
         throw new Error('Something went wrong!');
@@ -49,7 +50,7 @@ const Expenses = () => {
   return (
     <div className="container d-flex flex-wrap justify-content-center" style={{ padding: 0, width: '80%' }}>
       <div className="col-12 col-md-6 align-self-start my-5 mt-md-5 mx-auto ms-0 me-0 ms-md-0 me-md-0" style={{ borderRadius: '6px', border: '1px solid var(--bs-body-bg)', maxWidth: '933px', width: '100%' }}>
-        <h1 className="text-center py-4 py-md-5 mb-4 mb-md-0" style={{ color: 'var(--bs-body-bg)', borderBottomWidth: '1px', borderBottomStyle: 'solid' }}>Recent Expenses</h1>
+        <h1 className="text-center py-4 py-md-5 mb-4 mb-md-0" style={{ color: 'var(--bs-body-bg)', borderBottomWidth: '1px', borderBottomStyle: 'solid' }}>Expenses</h1>
         <div className="d-flex d-lg-flex align-items-center align-items-lg-center my-0 py-2" style={{ width: '100%', borderBottom: '1px solid var(--bs-body-bg)' }}>
           <div className="dropdown text-center" style={{ width: '50%' }}>
             <button className="btn btn-light dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">
