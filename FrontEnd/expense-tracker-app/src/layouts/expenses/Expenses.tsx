@@ -30,7 +30,6 @@ const Expenses = () => {
       if (!response.ok) {
         throw new Error('Something went wrong!');
       }
-      console.log(response);
 
       const responseJson = await response.json();
       setExpenses(responseJson.content);
