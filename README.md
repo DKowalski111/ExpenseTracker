@@ -8,17 +8,17 @@ Here are some screenshots of the Expense Tracker App to give you a glimpse of it
 
 ### Dashboard
 
-![Dashboard](![image](https://github.com/DKowalski111/ExpenseTracker/assets/91938265/ee64b66d-0ffd-4c69-a1ef-273e919822ae) )
+![Dashboard]( ![image](https://github.com/DKowalski111/ExpenseTracker/assets/91938265/ee64b66d-0ffd-4c69-a1ef-273e919822ae) )
 
 Describe the dashboard and any key features visible in the screenshot.
 
 ### Expenses
 
-![Expenses](![image](https://github.com/DKowalski111/ExpenseTracker/assets/91938265/a33731c4-36c8-46d1-bfa0-346249442819) )
+![Expenses]( ![image](https://github.com/DKowalski111/ExpenseTracker/assets/91938265/a33731c4-36c8-46d1-bfa0-346249442819) )
 
 ### Analytics
 
-![Analytics](![image](https://github.com/DKowalski111/ExpenseTracker/assets/91938265/048f478b-8b6a-4c22-bbb3-e10a3929aaa8) )
+![Analytics]( ![image](https://github.com/DKowalski111/ExpenseTracker/assets/91938265/048f478b-8b6a-4c22-bbb3-e10a3929aaa8) )
 
 ## Frontend
 
