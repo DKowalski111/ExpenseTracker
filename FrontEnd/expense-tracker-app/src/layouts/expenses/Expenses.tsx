@@ -16,7 +16,7 @@ const Expenses = () => {
 
   useEffect(() => {
     const fetchExpenses = async () => {
-      const url = `http://localhost:8080/api/expenses/search?page=${currentPage - 1}&size=20&sortBy=${sortBy}${category != "" ? "&category=" + category : ''}`;
+      const url = `${process.env.REACT_APP_API}/search?page=${currentPage - 1}&size=20&sortBy=${sortBy}${category != "" ? "&category=" + category : ''}`;
 
       const requestOptions = {
         method: 'GET',
